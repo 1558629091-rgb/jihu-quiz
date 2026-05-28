@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>基础护理学 · 刷题练习</title>
+<meta name="description" content="基础护理学选择题刷题练习，随时随地刷题备考">
+<meta property="og:title" content="基础护理学 · 刷题练习">
+<meta property="og:description" content="基础护理学选择题刷题练习，随时随地刷题备考">
+<meta property="og:type" content="website">
+<script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f0f4f8; min-height: 100vh; color: #2d3748;
+    -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+}
+.container { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+.header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff; padding: 16px 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+.header .subtitle { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+.progress-wrap { background: #fff; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; }
+.progress-info { display: flex; justify-content: space-between; font-size: 13px; color: #718096; margin-bottom: 8px; }
+.progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #1a73e8, #4fc3f7); border-radius: 3px; transition: width 0.3s ease; }
+.card { flex: 1; padding: 16px; }
+.question-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.question-type { display: inline-block; background: #ebf4ff; color: #1a73e8; font-size: 12px; padding: 4px 10px; border-radius: 12px; margin-bottom: 12px; font-weight: 500; }
+.question-type.multi { background: #fef5e7; color: #e67e22; }
+.question-num { font-size: 14px; font-weight: 600; color: #1a73e8; margin-bottom: 8px; }
+.question-text { font-size: 16px; line-height: 1.7; color: #2d3748; margin-bottom: 20px; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option { display: flex; align-items: center; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; background: #fff; position: relative; min-height: 52px; }
+.option:active { transform: scale(0.98); }
+.option .label { width: 32px; height: 32px; border-radius: 50%; background: #f0f4f8; color: #4a5568; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; margin-right: 12px; flex-shrink: 0; transition: all 0.2s ease; }
+.option .text { font-size: 15px; line-height: 1.5; color: #4a5568; flex: 1; }
+.option .label.square { border-radius: 6px; }
+.option.selected { border-color: #1a73e8; background: #ebf4ff; }
+.option.selected .label { background: #1a73e8; color: #fff; }
+.option.correct { border-color: #38a169; background: #f0fff4; }
+.option.correct .label { background: #38a169; color: #fff; }
+.option.wrong { border-color: #e53e3e; background: #fff5f5; }
+.option.wrong .label { background: #e53e3e; color: #fff; }
+.option.disabled { pointer-events: none; }
+.option.disabled.correct { opacity: 1; }
+.option.disabled:not(.correct):not(.wrong) { opacity: 0.6; }
+.explanation { margin-top: 16px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; display: none; }
+.explanation.show { display: block; }
+.explanation.correct-exp { background: #f0fff4; border: 1px solid #c6f6d5; color: #276749; }
+.explanation.wrong-exp { background: #fff5f5; border: 1px solid #fed7d7; color: #c53030; }
+.btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; text-align: center; }
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-outline { background: #fff; color: #1a73e8; border: 2px solid #1a73e8; }
+.btn-success { background: #38a169; color: #fff; }
+.btn-danger { background: #e53e3e; color: #fff; }
+.btn:disabled { opacity: 0.4; pointer-events: none; }
+.result-card { background: #fff; border-radius: 16px; padding: 30px 20px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.result-icon { font-size: 64px; margin-bottom: 16px; }
+.result-score { font-size: 48px; font-weight: 700; color: #1a73e8; margin-bottom: 8px; }
+.result-label { font-size: 14px; color: #718096; margin-bottom: 24px; }
+.result-stats { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; }
+.stat-item { text-align: center; }
+.stat-num { font-size: 28px; font-weight: 700; }
+.stat-label { font-size: 12px; color: #a0aec0; margin-top: 4px; }
+.mode-bar { display: flex; background: #fff; border-bottom: 1px solid #e2e8f0; }
+.mode-btn { flex: 1; padding: 12px 4px; text-align: center; font-size: 13px; color: #718096; cursor: pointer; border: none; background: none; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
+.mode-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 600; }
+.footer { padding: 16px; text-align: center; font-size: 12px; color: #a0aec0; }
+.toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 999; pointer-events: none; animation: toastIn 0.3s ease; }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+.wrong-bar { background: #fff5f5; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #fed7d7; font-size: 13px; color: #c53030; }
+@media (max-width: 360px) { .question-text { font-size: 15px; } .option { padding: 12px 14px; } .option .text { font-size: 14px; } .header h1 { font-size: 16px; } }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h1>基础护理学 · 刷题练习</h1><div class="subtitle">共 59 题 · 单选题+多选题</div></div>
+    <div class="mode-bar" id="modeBar">
+        <button class="mode-btn active" data-mode="all" onclick="switchMode('all')">全部刷题</button>
+        <button class="mode-btn" data-mode="random" onclick="switchMode('random')">随机模式</button>
+        <button class="mode-btn" data-mode="wrong" onclick="switchMode('wrong')" id="wrongModeBtn">错题重练<span id="wrongCountBadge"></span></button>
+    </div>
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info"><span id="progressText">第 1/59 题</span><span><span class="correct-count" id="correctNum">0</span> ✓ / <span class="wrong-count" id="wrongNum">0</span> ✗</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="wrong-bar" id="wrongBar" style="display:none"><span>上次错题 <strong id="wrongBarNum">0</strong> 道</span><span style="font-size:12px;color:#718096;">点击"错题重练"练习</span></div>
+    <div class="card" id="cardArea"></div>
+    <div class="footer"><span style="cursor:pointer;font-size:14px" onclick="sharePage()">📤 分享给同学</span>&nbsp;&nbsp;&nbsp;<span style="cursor:pointer;font-size:14px" onclick="copyLink()">🔗 复制链接</span></div>
+</div>
+<div id="toastContainer"></div>
+
+<script>
+var ALL_QUESTIONS = [{"id": 1, "question": "下列哪种情况适合冷疗法?", "options": [{"label": "A", "text": "痛经", "is_answer": false}, {"label": "B", "text": "牙髓炎", "is_answer": false}, {"label": "C", "text": "肌肉劳损48小时后", "is_answer": false}, {"label": "D", "text": "痔疮术后肿胀", "is_answer": true}, {"label": "E", "text": "慢性腰肌劳损", "is_answer": false}], "answer": "D"}, {"id": 3, "question": "冷疗法的主要生理作用不包括以下哪一项?", "options": [{"label": "A", "text": "减轻局部充血", "is_answer": false}, {"label": "B", "text": "降低组织代谢", "is_answer": false}, {"label": "C", "text": "促进血液循环", "is_answer": true}, {"label": "D", "text": "抑制细菌活动", "is_answer": false}, {"label": "E", "text": "缓解疼痛", "is_answer": false}], "answer": "C"}, {"id": 4, "question": "使用冰袋冷敷时，每次持续时间一般不超过:", "options": [{"label": "A", "text": "10分钟", "is_answer": false}, {"label": "B", "text": "20-30分钟", "is_answer": true}, {"label": "C", "text": "1小时", "is_answer": false}, {"label": "D", "text": "2小时", "is_answer": false}, {"label": "E", "text": "根据患者需求", "is_answer": false}], "answer": "B"}, {"id": 5, "question": "下列患者不宜进半流质饮食的是", "options": [{"label": "A", "text": "消化不良者", "is_answer": false}, {"label": "B", "text": "发热者", "is_answer": false}, {"label": "C", "text": "咀嚼障碍者", "is_answer": false}, {"label": "D", "text": "术后恢复者", "is_answer": false}, {"label": "E", "text": "消化道出血者", "is_answer": true}], "answer": "E"}, {"id": 6, "question": "正常量蛋白饮食，其饮食蛋白量是指()", "options": [{"label": "A", "text": "0.8~1.0g/kg.d", "is_answer": false}, {"label": "B", "text": "1.0~1.2g/ kg-d", "is_answer": true}, {"label": "C", "text": "0.5~0.8g/kg.d", "is_answer": false}, {"label": "D", "text": "1.2~1.5g/kg* d", "is_answer": false}, {"label": "E", "text": "1.5~2.0g/kg.d", "is_answer": false}], "answer": "B"}, {"id": 7, "question": "为适应不同病情需要，医院饮食分为", "options": [{"label": "A", "text": "基本饮食，治疗饮食,试验饮食", "is_answer": true}, {"label": "B", "text": "基本饮食,普通饮食,试验饮食", "is_answer": false}, {"label": "C", "text": "治疗饮食, 普通饮食  试验饮食", "is_answer": false}, {"label": "D", "text": "普通饮食,流质饮食，软质饮食", "is_answer": false}, {"label": "E", "text": "普通饮食,流质饮食，半流质饮食", "is_answer": false}], "answer": "A"}, {"id": 8, "question": "2003年国家卫生部疾病控制司公布的肥胖标准为", "options": [{"label": "A", "text": "BMI≥24", "is_answer": false}, {"label": "B", "text": "BMI≥25", "is_answer": false}, {"label": "C", "text": "BMI≥26", "is_answer": false}, {"label": "D", "text": "BMI≥ 28", "is_answer": true}, {"label": "E", "text": "BMI ≥ 30", "is_answer": false}], "answer": "D"}, {"id": 9, "question": "高蛋白饮食适用于()", "options": [{"label": "A", "text": "恶性肿瘤病", "is_answer": true}, {"label": "B", "text": "大面积烧伤病", "is_answer": true}, {"label": "C", "text": "急性肾炎病人", "is_answer": false}, {"label": "D", "text": "肾病综合征病人", "is_answer": true}, {"label": "E", "text": "甲状腺功能亢进症", "is_answer": true}], "answer": ["A", "B", "D", "E"]}, {"id": 10, "question": "下列关于尿量描述错误是", "options": [{"label": "A", "text": "正常成人24小时尿量为1000~2000mL", "is_answer": false}, {"label": "B", "text": "24小时尿量少于400ml称为少尿", "is_answer": false}, {"label": "C", "text": "夜尿持续大于500ml称为夜尿增多", "is_answer": true}, {"label": "D", "text": "24小时尿量少于100ml称为无尿", "is_answer": false}, {"label": "E", "text": "24小时尿量大于2500ml称为多尿", "is_answer": false}], "answer": "C"}, {"id": 11, "question": "尿液呈酱油色见于", "options": [{"label": "A", "text": "阻塞性黄疸", "is_answer": false}, {"label": "B", "text": "急性溶血", "is_answer": true}, {"label": "C", "text": "肝细胞性黄疸", "is_answer": false}, {"label": "D", "text": "肾脏肿瘤", "is_answer": false}, {"label": "E", "text": "晚期丝虫病", "is_answer": false}], "answer": "B"}, {"id": 16, "question": "1.(5分)患者女，56岁。卵巢癌术后，拔出尿管后7小时未能自行排尿。查体:耻骨上部膨隆，叩诊呈实音，有压痛，考虑尿留为患者实施导尿时，第二次消毒的顺序是", "options": [{"label": "A", "text": "自上而下，由外向内", "is_answer": false}, {"label": "B", "text": "自下而上，由外向内", "is_answer": false}, {"label": "C", "text": "自下而上，由内向外", "is_answer": false}, {"label": "D", "text": "自上而下，由内向外", "is_answer": false}, {"label": "E", "text": "自上而下，由内向外再向内", "is_answer": true}], "answer": "E"}, {"id": 17, "question": "患者女，56岁。卵果癌术后，拔出尿管后7小时未能自行排尿。查体:耻骨上部膨隆，叩诊呈实音，有压痛，考虑尿留为患者提供的护理措施中，维护其自尊的是()", "options": [{"label": "A", "text": "教育其养成良好的排尿习惯", "is_answer": false}, {"label": "B", "text": "耐心解释并提供隐蔽的排尿环境", "is_answer": true}, {"label": "C", "text": "调整体位以协助排尿", "is_answer": false}, {"label": "D", "text": "按摩其下腹部，使尿液排出", "is_answer": false}, {"label": "E", "text": "温水冲洗会阴以诱导排尿", "is_answer": false}], "answer": "B"}, {"id": 18, "question": "患者男，68岁，便秘5天。给予腹部按摩、开塞露均无效，医嘱要求灌肠，灌肠液的温度是()", "options": [{"label": "A", "text": "28°C~32°C", "is_answer": false}, {"label": "B", "text": "32°C~36°C", "is_answer": false}, {"label": "C", "text": "36°C~38°C", "is_answer": false}, {"label": "D", "text": "39°C~41°C", "is_answer": true}, {"label": "E", "text": "40°C~45°C", "is_answer": false}], "answer": "D"}, {"id": 19, "question": "患者男，56岁。患胃癌入院，术前遵医嘱行清洁灌肠灌肠时，患者应采取的体位是()", "options": [{"label": "A", "text": "仰卧位", "is_answer": false}, {"label": "B", "text": "俯卧位", "is_answer": false}, {"label": "C", "text": "头高脚低位", "is_answer": false}, {"label": "D", "text": "左侧卧位", "is_answer": true}, {"label": "E", "text": "右侧卧位", "is_answer": false}], "answer": "D"}, {"id": 20, "question": "患者男，56岁。患胃癌入院，术前遵医嘱行清洁灌肠灌肠结束后，护士应嘱患者尽量保留灌肠溶液多久后再排便", "options": [{"label": "A", "text": "20~30分钟", "is_answer": false}, {"label": "B", "text": "15~20分钟", "is_answer": false}, {"label": "C", "text": "10~15分钟", "is_answer": false}, {"label": "D", "text": "5-10分钟", "is_answer": true}, {"label": "E", "text": "灌肠后立即排便", "is_answer": false}], "answer": "D"}, {"id": 21, "question": "患者，男,66岁。进行性排尿困难1年，近3个月来尿频，每日排尿10余次，且尿道外口常有尿液溢出。体检:下腹部隆起叩诊实音;直肠指检:前列腺大小4cmx5cm，质韧，中央沟消失，测残余尿300ml。应考虑哪种排尿异常", "options": [{"label": "A", "text": "遗尿", "is_answer": false}, {"label": "B", "text": "充溢性尿失禁", "is_answer": true}, {"label": "C", "text": "压力性尿失禁", "is_answer": false}, {"label": "D", "text": "急迫性尿失禁", "is_answer": false}, {"label": "E", "text": "真性尿失禁", "is_answer": false}], "answer": "B"}, {"id": 22, "question": "患者女，19岁。因车祸外伤收入院行手术治疗。7日晚6点至8日晚6点护士记录患者尿袋中尿量如下:7日18:00 170ml8日21:00210ml8:00380ml12:0070ml18:00150ml护士清空尿袋经询问确认家属未自行清空尿袋，护士应判断患者为()", "options": [{"label": "A", "text": "尿量正常", "is_answer": false}, {"label": "B", "text": "少尿", "is_answer": true}, {"label": "C", "text": "无尿", "is_answer": false}, {"label": "D", "text": "多尿", "is_answer": false}, {"label": "E", "text": "尿崩", "is_answer": false}], "answer": "B"}, {"id": 23, "question": "患儿，女，5岁，因肺炎入院。体温39.8°C，遵医嘱为患儿灌肠，请问灌肠液的温度是", "options": [{"label": "A", "text": "4°C", "is_answer": false}, {"label": "B", "text": "29°C", "is_answer": true}, {"label": "C", "text": "38°C", "is_answer": false}, {"label": "D", "text": "40°C", "is_answer": false}, {"label": "E", "text": "42°C", "is_answer": false}], "answer": "B"}, {"id": 31, "question": "做下列哪种检查时禁止病人食用肉类、肝类、含铁药物、绿色蔬菜等()", "options": [{"label": "A", "text": "胆囊造影试验", "is_answer": false}, {"label": "B", "text": "吸碘试验", "is_answer": false}, {"label": "C", "text": "肌酐清除试验", "is_answer": false}, {"label": "D", "text": "葡萄糖耐量试验", "is_answer": false}, {"label": "E", "text": "隐血试验", "is_answer": true}], "answer": "E"}, {"id": 39, "question": "患者，男,45岁。患十二指肠溃疡，突然出现呕血，面色苍百，脉搏120次/分，血压60/45mmHg,医嘱输血400ml，目的是补充", "options": [{"label": "A", "text": "抗体", "is_answer": false}, {"label": "B", "text": "血容量", "is_answer": true}, {"label": "C", "text": "血小板", "is_answer": false}, {"label": "D", "text": "凝血因子", "is_answer": false}, {"label": "E", "text": "血红蛋白", "is_answer": false}], "answer": "B"}, {"id": 40, "question": "对于需要静脉输液的成年人，使用头皮针进行静脉穿刺时优先选择的血管是", "options": [{"label": "A", "text": "贵要静脉", "is_answer": false}, {"label": "B", "text": "头静脉", "is_answer": false}, {"label": "C", "text": "桡静脉", "is_answer": false}, {"label": "D", "text": "手背静脉网", "is_answer": true}, {"label": "E", "text": "肘正中静脉", "is_answer": false}], "answer": "D"}, {"id": 41, "question": "病人，女性，28岁。因异位妊娠破裂后大量输血。现病人出现手足抽搐、血压下降，可静脉缓慢注", "options": [{"label": "A", "text": "10%葡萄糖酸钙10ml", "is_answer": true}, {"label": "B", "text": "4%碳酸氢钠10ml", "is_answer": false}, {"label": "C", "text": "0.9%氯化钠10ml", "is_answer": false}, {"label": "D", "text": "盐酸肾上腺素2ml", "is_answer": false}, {"label": "E", "text": "地塞米松5mg", "is_answer": false}], "answer": "A"}, {"id": 43, "question": "发生溶血反应，初期的典型症状是", "options": [{"label": "A", "text": "四肢麻木，腰背剧痛", "is_answer": true}, {"label": "B", "text": "黄疸", "is_answer": false}, {"label": "C", "text": "血红蛋白尿", "is_answer": false}, {"label": "D", "text": "高热", "is_answer": false}, {"label": "E", "text": "呼吸急促", "is_answer": false}], "answer": "A"}, {"id": 45, "question": "护士巡视病房时，发现患者输液不滴，注射部位肿胀，患者主诉疼痛，无回血。该护士为此患者应采取的措施为", "options": [{"label": "A", "text": "检查滴管各接头部位是否松动，上端输液管和滴管内有无漏气或裂隙", "is_answer": false}, {"label": "B", "text": "热敷注射部位下端血管，按摩肿胀部位", "is_answer": false}, {"label": "C", "text": "用力挤压输液管，直至液体通畅", "is_answer": false}, {"label": "D", "text": "调整针头位置或适当变换肢体位置", "is_answer": false}, {"label": "E", "text": "应立即拔出针头，另选血管更换针头重新进针", "is_answer": true}], "answer": "E"}, {"id": 46, "question": "病人，男性，50岁。患肾脏疾病，需做尿蛋白定量检查。需在标本中加入", "options": [{"label": "A", "text": "甲醛", "is_answer": false}, {"label": "B", "text": "乙醛", "is_answer": false}, {"label": "C", "text": "甲苯", "is_answer": true}, {"label": "D", "text": "稀盐酸", "is_answer": false}, {"label": "E", "text": "浓盐酸", "is_answer": false}], "answer": "C"}, {"id": 47, "question": "病人，女性，28岁。1周来出现晨起眼睑水肿，肉眼血尿，疑急性肾小球肾炎，需留12小时尿作艾迪计数应在尿液中加入", "options": [{"label": "A", "text": "甲醛", "is_answer": true}, {"label": "B", "text": "乙醛", "is_answer": false}, {"label": "C", "text": "乙酚", "is_answer": false}, {"label": "D", "text": "稀盐酸", "is_answer": false}, {"label": "E", "text": "浓盐酸", "is_answer": false}], "answer": "A"}, {"id": 48, "question": "采集24小时尿标本时，其正确采集的时间是", "options": [{"label": "A", "text": "早7:00到次晨7:00", "is_answer": true}, {"label": "B", "text": "早9:00到次晨9:00", "is_answer": false}, {"label": "C", "text": "早11:00到次晨9:00", "is_answer": false}, {"label": "D", "text": "晚7:00到次日晚7:00", "is_answer": false}, {"label": "E", "text": "晚11:00到次日晚11:00", "is_answer": false}], "answer": "A"}, {"id": 49, "question": "亚急性心内膜炎血培养标本采血量应为", "options": [{"label": "A", "text": "1~3ml", "is_answer": false}, {"label": "B", "text": "4~6ml", "is_answer": false}, {"label": "C", "text": "7~9ml", "is_answer": false}, {"label": "D", "text": "10~20ml", "is_answer": true}, {"label": "E", "text": "20~30ml", "is_answer": false}], "answer": "D"}, {"id": 51, "question": "病人，男性，46岁。为查找癌细胞需留痰标本，固定标本的溶液宜选用", "options": [{"label": "A", "text": "3%来苏儿", "is_answer": false}, {"label": "B", "text": "5%苯酚", "is_answer": false}, {"label": "C", "text": "10%甲醛", "is_answer": true}, {"label": "D", "text": "0.2%漂白粉", "is_answer": false}, {"label": "E", "text": "0.2%苯扎溴铵", "is_answer": false}], "answer": "C"}, {"id": 52, "question": "病人，男性，60岁。因呕血、黑便6天入院。入院后需做潜血试验。护士应嘱病人在检查前3天禁食", "options": [{"label": "A", "text": "豆制品", "is_answer": false}, {"label": "B", "text": "牛奶", "is_answer": false}, {"label": "C", "text": "芋头", "is_answer": false}, {"label": "D", "text": "动物血", "is_answer": true}, {"label": "E", "text": "面包", "is_answer": false}], "answer": "D"}, {"id": 53, "question": "检查粪便中的寄生虫应", "options": [{"label": "A", "text": "取中间部位的粪便", "is_answer": false}, {"label": "B", "text": "取边缘部位的粪便", "is_answer": false}, {"label": "C", "text": "取不同部位的粪便", "is_answer": true}, {"label": "D", "text": "随意取不同部位的粪便", "is_answer": false}, {"label": "E", "text": "留取全部粪便", "is_answer": false}], "answer": "C"}, {"id": 54, "question": "24小时尿标本检查需要加入甲醛作为防腐剂的检查项目是", "options": [{"label": "A", "text": "艾迪计数", "is_answer": true}, {"label": "B", "text": "17-酮类固醇", "is_answer": false}, {"label": "C", "text": "尿糖定量", "is_answer": false}, {"label": "D", "text": "尿蛋白定量", "is_answer": false}, {"label": "E", "text": "肌酐定量", "is_answer": false}], "answer": "A"}, {"id": 57, "question": "病人张某，急性中毒，但意识清楚合作，可采用的洗胃方法是", "options": [{"label": "A", "text": "口服催吐法", "is_answer": true}, {"label": "B", "text": "电动吸引洗胃法", "is_answer": false}, {"label": "C", "text": "漏斗胃管洗胃法", "is_answer": false}, {"label": "D", "text": "注射器洗胃法", "is_answer": false}, {"label": "E", "text": "自动洗胃机洗胃法", "is_answer": false}], "answer": "A"}, {"id": 58, "question": "下列哪种药物中毒时需忌服牛奶", "options": [{"label": "A", "text": "盐酸", "is_answer": false}, {"label": "B", "text": "氢氧化钠", "is_answer": false}, {"label": "C", "text": "磷化锌", "is_answer": true}, {"label": "D", "text": "来苏水", "is_answer": false}, {"label": "E", "text": "苯酚", "is_answer": false}], "answer": "C"}, {"id": 60, "question": "病人，男性，60岁，肝硬化10年。近2日嗜睡，今晨测体温时呼之不应，但压迫其眶上神经有痛苦表情，该病人的意识状态是", "options": [{"label": "A", "text": "深昏迷", "is_answer": false}, {"label": "B", "text": "昏睡", "is_answer": false}, {"label": "C", "text": "嗜睡", "is_answer": false}, {"label": "D", "text": "浅昏迷", "is_answer": true}, {"label": "E", "text": "意识模糊", "is_answer": false}], "answer": "D"}, {"id": 62, "question": "病人，男性，因敌百虫中毒急送医院，护士为其洗胃。禁用的洗胃溶液是", "options": [{"label": "A", "text": "2%~4%碳酸氢钠溶液", "is_answer": true}, {"label": "B", "text": "1:15000~1:20000高锰酸钾溶液", "is_answer": false}, {"label": "C", "text": "5%醋酸", "is_answer": false}, {"label": "D", "text": "温开水或生理盐水", "is_answer": false}, {"label": "E", "text": "蛋清水", "is_answer": false}], "answer": "A"}, {"id": 63, "question": "病人，男性，29岁，安眠药中毒，处于昏迷状态，须立即进行漏斗法洗胃。适宜的洗胃液是", "options": [{"label": "A", "text": "1:15000~1:20000高锰酸钾", "is_answer": true}, {"label": "B", "text": "1%盐水", "is_answer": false}, {"label": "C", "text": "2%~4%碳酸氢钠", "is_answer": false}, {"label": "D", "text": "5%醋酸", "is_answer": false}, {"label": "E", "text": "0.1%硫酸铜", "is_answer": false}], "answer": "A"}, {"id": 66, "question": "尸僵一般在死后多少小时开始出现", "options": [{"label": "A", "text": "1-3小时", "is_answer": true}, {"label": "B", "text": "2-3小时", "is_answer": false}, {"label": "C", "text": "12-16小时", "is_answer": false}, {"label": "D", "text": "20小时", "is_answer": false}, {"label": "E", "text": "24小时", "is_answer": false}], "answer": "A"}, {"id": 67, "question": "临终患者最早出现的心理反应期一般是()", "options": [{"label": "A", "text": "否认期", "is_answer": true}, {"label": "B", "text": "愤怒期", "is_answer": false}, {"label": "C", "text": "协议期", "is_answer": false}, {"label": "D", "text": "犹豫期", "is_answer": false}, {"label": "E", "text": "接受期", "is_answer": false}], "answer": "A"}, {"id": 68, "question": "临终病人通常最早出现的心理反应期是", "options": [{"label": "A", "text": "协议期", "is_answer": false}, {"label": "B", "text": "愤怒期", "is_answer": false}, {"label": "C", "text": "否认期", "is_answer": true}, {"label": "D", "text": "接受期", "is_answer": false}, {"label": "E", "text": "忧郁期", "is_answer": false}], "answer": "C"}, {"id": 72, "question": "死亡后,尸绿首先出现的部位是", "options": [{"label": "A", "text": "脐周", "is_answer": false}, {"label": "C", "text": "右上腹", "is_answer": false}, {"label": "B", "text": "左上腹", "is_answer": false}, {"label": "D", "text": "左下腹", "is_answer": false}, {"label": "E", "text": "右下腹", "is_answer": true}], "answer": "E"}, {"id": 69, "question": "病人,男性,48岁。肺癌晚期,目前神志模糊,肌张力消失,心音1钝,脉搏细弱,血压下降,间歇呼吸。该病人处于", "options": [{"label": "A", "text": "濒死期", "is_answer": true}, {"label": "C", "text": "生物学死亡期", "is_answer": false}, {"label": "B", "text": "临床死亡期", "is_answer": false}, {"label": "D", "text": "临终状态", "is_answer": false}, {"label": "E", "text": "躯体死亡期", "is_answer": false}], "answer": "A"}, {"id": 70, "question": "脑死亡判断标准不包括", "options": [{"label": "A", "text": "心电图呈直线", "is_answer": true}, {"label": "C", "text": "自发呼吸停止", "is_answer": false}, {"label": "B", "text": "不可逆的深度昏迷", "is_answer": false}, {"label": "D", "text": "脑电波消失", "is_answer": false}, {"label": "E", "text": "脑于反射消失", "is_answer": false}], "answer": "A"}, {"id": 71, "question": "病人,男性,66岁。车祸撞伤脑部,出血后出现深昏迷，脑干反射消失,脑电波消失,无自主呼吸。该病人目前处于", "options": [{"label": "A", "text": "临床死亡期", "is_answer": false}, {"label": "C", "text": "生物学死亡期", "is_answer": false}, {"label": "B", "text": "脑死亡期", "is_answer": true}, {"label": "D", "text": "濒死期", "is_answer": false}, {"label": "E", "text": "疾病晚期", "is_answer": false}], "answer": "B"}, {"id": 74, "question": "患者男，25岁。因结核性脑膜炎需肌内注射链霉素。患者取侧卧位时，正确的体位是()", "options": [{"label": "A", "text": "下腿伸直，上腿稍弯曲", "is_answer": false}, {"label": "B", "text": "上腿伸直，下腿稍弯曲", "is_answer": true}, {"label": "C", "text": "双膝向腹部弯曲", "is_answer": false}, {"label": "D", "text": "两腿弯曲", "is_answer": false}, {"label": "E", "text": "两腿伸直", "is_answer": false}], "answer": "B"}, {"id": 76, "question": "患者男，29岁。因高热、畏寒、咳嗽、流涕而住院治疗。医生开出以下口服药，护士在指导用药时嘱咐患者宜最后服用的是()", "options": [{"label": "A", "text": "止咳糖浆", "is_answer": true}, {"label": "B", "text": "利巴韦林", "is_answer": false}, {"label": "C", "text": "维C银翘片", "is_answer": false}, {"label": "D", "text": "对乙酰氨基酚", "is_answer": false}, {"label": "E", "text": "阿莫西林胶囊", "is_answer": false}], "answer": "A"}, {"id": 77, "question": "患者男，38岁。因肺部感染来院，医嘱行青霉素皮试，皮试3分钟后患者突然出现呼吸困难，脉搏细弱，面色苍白、意识丧失。护士应立即采取的措施是()", "options": [{"label": "A", "text": "通知家属", "is_answer": false}, {"label": "B", "text": "报告医生", "is_answer": false}, {"label": "C", "text": "行心肺复苏术", "is_answer": false}, {"label": "D", "text": "将患者送入抢救室", "is_answer": false}, {"label": "E", "text": "皮下注射盐酸肾上腺素", "is_answer": true}], "answer": "E"}, {"id": 78, "question": "患儿女，1岁。因淋巴结核住院，医嘱肌内注射数种药物。护士为该患儿肌内注射时，不恰当的操作是()", "options": [{"label": "A", "text": "宜选用肌肉肥厚的臀大肌", "is_answer": true}, {"label": "B", "text": "注射时应固定好肢体，防止折针", "is_answer": false}, {"label": "C", "text": "注意药物的配伍禁忌", "is_answer": false}, {"label": "D", "text": "注意经常更换注射部位", "is_answer": false}, {"label": "E", "text": "切勿将针梗全部刺入", "is_answer": false}], "answer": "A"}, {"id": 79, "question": "患者男性，65岁，因高血压入院治疗。某白班护士发药时发现患者不在，同室病友告诉护士患者外出接受检查士应", "options": [{"label": "A", "text": "将药放在病人床头柜上", "is_answer": false}, {"label": "B", "text": "将药交给同室病友", "is_answer": false}, {"label": "C", "text": "将药交给护工转发", "is_answer": false}, {"label": "D", "text": "将药放在病人床上并电话告知", "is_answer": false}, {"label": "E", "text": "暂缓发药并交班", "is_answer": true}], "answer": "E"}, {"id": 81, "question": "护士为患者分发口服药后将一次性药杯收回，正确的处理方法是", "options": [{"label": "A", "text": "直接丢弃", "is_answer": false}, {"label": "B", "text": "消毒后销毁", "is_answer": true}, {"label": "C", "text": "清洗后消毒", "is_answer": false}, {"label": "D", "text": "消毒后备用", "is_answer": false}, {"label": "E", "text": "清洗后备用", "is_answer": false}], "answer": "B"}, {"id": 84, "question": "患者男性，55岁。因输液速度过快导致急性肺水肿，护士在给氧时湿化瓶内应加入()", "options": [{"label": "A", "text": "乙醇溶液", "is_answer": true}, {"label": "B", "text": "碳酸氢钠溶液", "is_answer": false}, {"label": "C", "text": "硼酸溶液", "is_answer": false}, {"label": "D", "text": "醋酸溶液", "is_answer": false}, {"label": "E", "text": "硝酸钠溶液", "is_answer": false}], "answer": "A"}, {"id": 85, "question": "患者男，25岁。因多发性外伤急症入院。入院时患者神志不清、出血较多，行急症手术并输液输血，当籍进行到20分钟时，护士观察到患者突然出现寒战、发热、腰背酸痛、呼吸困难、酱油色尿。该患者最可能发生的输血不反应是()", "options": [{"label": "A", "text": "枸橼酸钠中毒反应", "is_answer": false}, {"label": "B", "text": "溶血反应", "is_answer": true}, {"label": "C", "text": "空气栓塞", "is_answer": false}, {"label": "D", "text": "过敏反应", "is_answer": false}, {"label": "E", "text": "肺水肿", "is_answer": false}], "answer": "B"}, {"id": 86, "question": "患者女，45岁，因门脉高压大出血入院，医嘱输血1000ml，静脉注射10%葡萄糖酸钙10ml。补钙的目是()", "options": [{"label": "A", "text": "降低血钾", "is_answer": false}, {"label": "B", "text": "使钾离子从细胞外向细胞内转移", "is_answer": false}, {"label": "C", "text": "纠正酸中毒", "is_answer": false}, {"label": "D", "text": "降低神经肌肉的应激性", "is_answer": true}, {"label": "E", "text": "对抗钾离子对心肌的应激性", "is_answer": false}], "answer": "D"}, {"id": 87, "question": "护士在执行输注血小板的过程中，错误的是", "options": [{"label": "A", "text": "采用双人核对法", "is_answer": false}, {"label": "B", "text": "输注前轻摇血袋", "is_answer": false}, {"label": "C", "text": "直接缓慢输注血小板", "is_answer": true}, {"label": "D", "text": "血液内不能加入其他药物", "is_answer": false}, {"label": "E", "text": "记录输注时间及血型、血量", "is_answer": false}], "answer": "C"}, {"id": 88, "question": "患者女，20岁。诊断为再生障碍性贫血，医嘱:输注浓缩红细胞。护士巡房时发现输血速度变慢，穿刺点局部无肿胀，无压痛，挤捏输血器无阻力，局部皮肤温度正常。护士首先应0", "options": [{"label": "A", "text": "用生理盐水冲管", "is_answer": true}, {"label": "B", "text": "热敷患者穿刺局部", "is_answer": false}, {"label": "C", "text": "更换输血器后继续输血", "is_answer": false}, {"label": "D", "text": "使用恒温器加热血液", "is_answer": false}, {"label": "E", "text": "拔针后另行穿刺", "is_answer": false}], "answer": "A"}, {"id": 89, "question": "患者男，35岁。因重型再生障碍性贫血收入院，拟对其进行输血前的准备时，不正确的操作是()", "options": [{"label": "A", "text": "输血前应先征得患者同意并签署知情同意书", "is_answer": false}, {"label": "B", "text": "取血时，和血库人员做好“三查八对”", "is_answer": false}, {"label": "C", "text": "库存血取出后，如紧急需要，可低温加热", "is_answer": true}, {"label": "D", "text": "输血前需与另一名护士再次核对", "is_answer": false}, {"label": "E", "text": "进行血型鉴定和交叉配血实验", "is_answer": false}], "answer": "C"}, {"id": 91, "question": "人，男性，46岁，在田间作业时不慎被锈钉刺伤，医嘱TAT肌内注射，St.。病人行TAT过敏试验，结果阳性。正确的做法是", "options": [{"label": "A", "text": "分四次注射，剂量逐渐递减", "is_answer": false}, {"label": "B", "text": "分四次注射，剂量逐渐递增", "is_answer": true}, {"label": "C", "text": "分五次注射，剂量逐渐递减", "is_answer": false}, {"label": "D", "text": "分五次注射，剂量逐渐递增", "is_answer": false}, {"label": "E", "text": "分四等份，分次注射", "is_answer": false}], "answer": "B"}, {"id": 92, "question": "抢救链霉素过敏反应的药物是", "options": [{"label": "A", "text": "盐酸肾上腺素", "is_answer": false}, {"label": "B", "text": "阿托品", "is_answer": false}, {"label": "C", "text": "葡萄糖", "is_answer": false}, {"label": "D", "text": "葡萄糖酸钙", "is_answer": true}, {"label": "E", "text": "异丙肾上腺素", "is_answer": false}], "answer": "D"}, {"id": 93, "question": "病人，女性，17岁。行破伤风抗毒素过敏试验。20分钟后结果显示局部皮丘红肿，硬结大于1.5cm，红晕大于4cm，自述有痒感。应采取的处理措施是", "options": [{"label": "A", "text": "将抗毒素分成四等份，分次注射", "is_answer": false}, {"label": "B", "text": "在对侧前臂作对照试验后再注射", "is_answer": false}, {"label": "C", "text": "将抗毒素稀释，分2次注射", "is_answer": false}, {"label": "D", "text": "待病人痒感消失后再全量注射", "is_answer": false}, {"label": "E", "text": "将抗毒素分4次逐渐增加剂量注射", "is_answer": true}], "answer": "E"}];
+
+var state = {
+    mode: 'all', questions: [], currentIndex: 0,
+    selectedOptions: [], answered: false,
+    correctCount: 0, wrongCount: 0,
+    answeredQuestions: [],
+    wrongIds: JSON.parse(localStorage.getItem('jihu_wrong_ids')||'[]'),
+    shuffled: false
+};
+
+function isMulti(q){ return Array.isArray(q.answer); }
+
+document.addEventListener('DOMContentLoaded', function(){ updateWrongUI(); switchMode('all'); });
+
+function updateWrongUI(){
+    var cnt = state.wrongIds.length;
+    var badge = document.getElementById('wrongCountBadge');
+    badge.textContent = cnt>0 ? '('+cnt+')' : '';
+    var bar = document.getElementById('wrongBar');
+    if(cnt>0){ bar.style.display='flex'; document.getElementById('wrongBarNum').textContent=cnt; }
+    else { bar.style.display='none'; }
+}
+
+function switchMode(mode){
+    state.mode = mode; state.currentIndex=0; state.correctCount=0; state.wrongCount=0;
+    state.answeredQuestions=[]; state.answered=false; state.selectedOptions=[]; state.shuffled=false;
+    document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelector('[data-mode="'+mode+'"]').classList.add('active');
+    if(mode==='all'){ state.questions=ALL_QUESTIONS.slice(); }
+    else if(mode==='random'){ state.questions=shuffleArr(ALL_QUESTIONS.slice()); state.shuffled=true; }
+    else if(mode==='wrong'){
+        var wids=state.wrongIds;
+        state.questions=ALL_QUESTIONS.filter(function(q){ return wids.indexOf(q.id)!==-1; });
+        if(state.questions.length===0){
+            document.getElementById('cardArea').innerHTML='<div class="result-card"><div class="result-icon">🎉</div><div style="font-size:20px;font-weight:600;margin-bottom:8px;">没有错题！</div><div style="color:#718096;margin-bottom:16px;">所有题目都已掌握，继续保持！</div><button class="btn btn-primary" onclick="switchMode(\'all\')">开始全部刷题</button></div>';
+            document.getElementById('progressWrap').style.display='none';
+            return;
+        }
+    }
+    document.getElementById('progressWrap').style.display='block';
+    updateProgress();
+    renderQuestion();
+}
+
+function shuffleArr(arr){ for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i];arr[i]=arr[j];arr[j]=t; } return arr; }
+
+function renderQuestion(){
+    if(state.currentIndex>=state.questions.length){ showResult(); return; }
+    var q=state.questions[state.currentIndex];
+    state.answered=false; state.selectedOptions=[];
+    var multi = isMulti(q);
+    var opts=q.options;
+    if(state.shuffled){ opts=shuffleArr(opts.slice()); }
+    var h='<div class="question-card">';
+    h+='<span class="question-type'+(multi?' multi':'')+'">'+(multi?'多选题':'单选题')+'</span>';
+    h+='<div class="question-num">第 '+(state.currentIndex+1)+'/'+state.questions.length+' 题 · 题号 #'+q.id+'</div>';
+    h+='<div class="question-text">'+esc(q.question)+'</div>';
+    if(multi){ h+='<div style="color:#e67e22;font-size:13px;margin-bottom:12px;">（可多选，选择后点击"确认答案"）</div>'; }
+    h+='<div class="options" id="optionsContainer">';
+    opts.forEach(function(opt){
+        var labelClass = multi ? 'label square' : 'label';
+        var onclick = multi ? ('toggleMulti(''+opt.label+'',this)') : ('selectSingle(''+opt.label+'',this)');
+        h+='<div class="option" data-label="'+opt.label+'" onclick="'+onclick+'"><span class="'+labelClass+'">'+opt.label+'</span><span class="text">'+esc(opt.text)+'</span></div>';
+    });
+    h+='</div>';
+    h+='<div class="explanation" id="explanation"></div>';
+    h+='<div class="btn-row">';
+    if(multi){
+        h+='<button class="btn btn-primary" id="confirmBtn" onclick="confirmMulti()">确认答案</button>';
+    }
+    h+='<button class="btn btn-primary" id="nextBtn" style="display:none" onclick="nextQuestion()">'+(state.currentIndex<state.questions.length-1?'下一题 →':'查看结果')+'</button>';
+    h+='</div>';
+    h+='</div>';
+    document.getElementById('cardArea').innerHTML=h;
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMulti(label,el){
+    if(state.answered)return;
+    var idx=state.selectedOptions.indexOf(label);
+    if(idx>=0){
+        state.selectedOptions.splice(idx,1);
+        el.classList.remove('selected');
+    } else {
+        state.selectedOptions.push(label);
+        el.classList.add('selected');
+    }
+}
+
+function confirmMulti(){
+    if(state.answered || state.selectedOptions.length===0)return;
+    state.answered=true;
+    var q=state.questions[state.currentIndex];
+    var correctAnswer=q.answer;
+    var selected=state.selectedOptions.slice().sort();
+    var correct=correctAnswer.slice().sort();
+    var isCorrect=arraysEqual(selected,correct);
+
+    var allOpts=document.querySelectorAll('.option');
+    allOpts.forEach(function(opt){
+        opt.classList.add('disabled');
+        var ol=opt.getAttribute('data-label');
+        if(correctAnswer.indexOf(ol)>=0){ opt.classList.add('correct'); }
+        if(selected.indexOf(ol)>=0 && correctAnswer.indexOf(ol)<0){ opt.classList.add('wrong'); }
+    });
+
+    document.getElementById('confirmBtn').style.display='none';
+    document.getElementById('nextBtn').style.display='block';
+
+    var expEl=document.getElementById('explanation');
+    if(isCorrect){
+        expEl.className='explanation correct-exp show';
+        expEl.innerHTML='✅ <strong>回答正确！</strong> 正确答案：'+correctAnswer.join('、');
+        state.correctCount++;
+    } else {
+        expEl.className='explanation wrong-exp show';
+        expEl.innerHTML='❌ <strong>回答错误</strong> · 正确答案是 <strong>'+correctAnswer.join('、')+'</strong>（你选了：'+selected.join('、')+'）';
+        state.wrongCount++;
+        if(state.wrongIds.indexOf(q.id)===-1){
+            state.wrongIds.push(q.id);
+            localStorage.setItem('jihu_wrong_ids',JSON.stringify(state.wrongIds));
+            updateWrongUI();
+        }
+    }
+    state.answeredQuestions.push({id:q.id,correct:isCorrect});
+    updateProgress();
+}
+
+function selectSingle(label,el){
+    if(state.answered)return;
+    state.selectedOptions=[label]; state.answered=true;
+    var q=state.questions[state.currentIndex];
+    var correctAnswer=q.answer;
+    var isCorrect=(label===correctAnswer);
+    el.classList.add('selected');
+    var allOpts=document.querySelectorAll('.option');
+    allOpts.forEach(function(opt){
+        opt.classList.add('disabled');
+        var ol=opt.getAttribute('data-label');
+        if(ol===correctAnswer){ opt.classList.add('correct'); }
+        if(ol===label&&!isCorrect){ opt.classList.add('wrong'); }
+    });
+    var expEl=document.getElementById('explanation');
+    if(isCorrect){
+        expEl.className='explanation correct-exp show';
+        expEl.innerHTML='✅ <strong>回答正确！</strong>';
+        state.correctCount++;
+    } else {
+        expEl.className='explanation wrong-exp show';
+        expEl.innerHTML='❌ <strong>回答错误</strong> · 正确答案是 <strong>'+correctAnswer+'</strong>';
+        state.wrongCount++;
+        if(state.wrongIds.indexOf(q.id)===-1){
+            state.wrongIds.push(q.id);
+            localStorage.setItem('jihu_wrong_ids',JSON.stringify(state.wrongIds));
+            updateWrongUI();
+        }
+    }
+    state.answeredQuestions.push({id:q.id,correct:isCorrect});
+    document.getElementById('nextBtn').style.display='block';
+    updateProgress();
+}
+
+function arraysEqual(a,b){
+    if(a.length!==b.length)return false;
+    for(var i=0;i<a.length;i++){ if(a[i]!==b[i])return false; }
+    return true;
+}
+
+function nextQuestion(){ state.currentIndex++; updateProgress(); renderQuestion(); }
+
+function updateProgress(){
+    var total=state.questions.length;
+    var done=state.currentIndex;
+    var pct=total>0?Math.round(done/total*100):0;
+    document.getElementById('progressText').textContent='第 '+Math.min(done+1,total)+'/'+total+' 题';
+    document.getElementById('correctNum').textContent=state.correctCount;
+    document.getElementById('wrongNum').textContent=state.wrongCount;
+    document.getElementById('progressFill').style.width=pct+'%';
+}
+
+function showResult(){
+    var total=state.answeredQuestions.length;
+    var correct=state.correctCount;
+    var wrong=state.wrongCount;
+    var pct=total>0?Math.round(correct/total*100):0;
+    var emoji,msg;
+    if(pct>=90){ emoji='🏆'; msg='太厉害了！知识掌握非常扎实！'; }
+    else if(pct>=70){ emoji='👍'; msg='表现不错，继续加油！'; }
+    else if(pct>=50){ emoji='📖'; msg='还需努力，多复习几遍！'; }
+    else { emoji='💪'; msg='别灰心，坚持练习就会进步！'; }
+    document.getElementById('progressWrap').style.display='none';
+    var h='<div class="result-card">';
+    h+='<div class="result-icon">'+emoji+'</div>';
+    h+='<div class="result-score">'+pct+'分</div>';
+    h+='<div class="result-label">'+msg+'</div>';
+    h+='<div class="result-stats"><div class="stat-item"><div class="stat-num" style="color:#38a169">'+correct+'</div><div class="stat-label">答对</div></div><div class="stat-item"><div class="stat-num" style="color:#e53e3e">'+wrong+'</div><div class="stat-label">答错</div></div><div class="stat-item"><div class="stat-num" style="color:#718096">'+total+'</div><div class="stat-label">总题数</div></div></div>';
+    if(wrong>0){ h+='<button class="btn btn-danger" style="width:100%;margin-bottom:10px" onclick="switchMode(\'wrong\')">🔁 错题重练 ('+state.wrongIds.length+'题)</button>'; }
+    h+='<div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="switchMode(\'all\')">📝 再来一遍</button><button class="btn btn-outline" onclick="switchMode(\'random\')">🎲 随机刷题</button></div>';
+    h+='</div>';
+    document.getElementById('cardArea').innerHTML=h;
+}
+
+function sharePage(){
+    if(navigator.share){ navigator.share({title:'基础护理学 · 刷题练习',text:'一起来刷基础护理学选择题，备战护考！',url:window.location.href}).catch(function(){}); }
+    else if(/MicroMessenger/i.test(navigator.userAgent)){ showToast('请点击右上角 ··· 分享给朋友'); }
+    else { copyLink(); }
+}
+
+function copyLink(){
+    var url=window.location.href;
+    if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ showToast('链接已复制，去微信粘贴给朋友吧！'); }).catch(function(){ showToast('复制失败，请手动复制地址栏链接'); }); }
+    else {
+        var ta=document.createElement('textarea'); ta.value=url;
+        ta.style.cssText='position:fixed;opacity:0;';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); showToast('链接已复制，去微信粘贴给朋友吧！'); }catch(e){ showToast('复制失败，请手动复制地址栏链接'); }
+        document.body.removeChild(ta);
+    }
+}
+
+function showToast(msg){
+    var old=document.querySelector('.toast'); if(old)old.remove();
+    var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+    document.getElementById('toastContainer').appendChild(t);
+    setTimeout(function(){ t.remove(); },2000);
+}
+
+function esc(text){
+    var d=document.createElement('div'); d.textContent=text; return d.innerHTML;
+}
+</script>
+</body>
+</html>
