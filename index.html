@@ -157,7 +157,7 @@ function renderQuestion(){
     h+='<div class="options" id="optionsContainer">';
     opts.forEach(function(opt){
         var labelClass = multi ? 'label square' : 'label';
-        var onclick = multi ? ('toggleMulti(''+opt.label+'',this)') : ('selectSingle(''+opt.label+'',this)');
+        var onclick = multi ? ("toggleMulti('"+opt.label+"',this)") : ("selectSingle('"+opt.label+"',this)");
         h+='<div class="option" data-label="'+opt.label+'" onclick="'+onclick+'"><span class="'+labelClass+'">'+opt.label+'</span><span class="text">'+esc(opt.text)+'</span></div>';
     });
     h+='</div>';
